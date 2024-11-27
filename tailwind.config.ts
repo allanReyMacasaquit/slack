@@ -60,6 +60,8 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))',
 				},
+				google: '#4285F4',
+				github: '#181717',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

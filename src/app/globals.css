@@ -6,6 +6,23 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 	background-color: rgb(229, 237, 238);
 }
+.auth-container {
+	@apply min-h-screen 
+		flex 
+		flex-col 
+		items-center 
+		justify-center
+		mx-auto
+		w-full
+		px-6
+		lg:w-2/3;
+}
+.google {
+	@apply bg-google;
+}
+.github {
+	@apply bg-github;
+}
 
 @layer base {
 	:root {
