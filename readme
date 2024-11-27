@@ -1,0 +1,40 @@
+**Set up Backend**
+(Open terminal inside project)
+
+1. npm install convex
+2. npx convex dev
+
+Add a new file ConvexClientProvider.tsx in the app/ folder. Include the "use client"; directive, create a ConvexReactClient and a component that wraps its children in a ConvexProvider.
+import { ConvexClientProvider } from '@/components/ConvexClientProvider';
+
+3. npm install @convex-dev/auth @auth/core@0.36.0
+4. npx @convex-dev/auth
+
+**define schema**
+import { defineSchema } from "convex/server";
+import { authTables } from "@convex-dev/auth/server";
+
+const schema = defineSchema({
+...authTables,
+// Your other tables...
+});
+
+export default schema;
+
+5. Wrap your app in ConvexAuthNextjsServerProvider from @convex-dev/auth/nextjs/server:
+   import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
+
+6. In your client provider file, replace ConvexProvider from convex/react
+   with ConvexAuthNextjsProvider from @convex-dev/auth/nextjs:
+   import { ConvexAuthNextjsProvider } from "@convex-dev/auth/nextjs";
+
+7. lastly: add middleware
+   import { convexAuthNextjsMiddleware } from "@convex-dev/auth/nextjs/server";
+
+export default convexAuthNextjsMiddleware();
+
+export const config = {
+// The following matcher runs middleware on all routes
+// except static assets.
+matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+};
