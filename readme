@@ -38,3 +38,65 @@ export const config = {
 // except static assets.
 matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
+
+**Update middleware**
+
+1. import {
+   convexAuthNextjsMiddleware,
+   createRouteMatcher,
+   isAuthenticatedNextjs,
+   nextjsMiddlewareRedirect,
+   } from '@convex-dev/auth/nextjs/server';
+
+const isPublicPage = createRouteMatcher(['/auth']);
+
+export default convexAuthNextjsMiddleware((request) => {
+if (!isPublicPage(request) && !isAuthenticatedNextjs()) {
+return nextjsMiddlewareRedirect(request, '/auth');
+}
+});
+
+export const config = {
+// The following matcher runs middleware on all routes
+// except static assets.
+matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+};
+
+**END Update middleware**
+
+**OAuth**
+
+1. use HTTP Actions URL: https://yourCallbackUrl/api/auth/callback/github
+
+register to github to get Client ID.
+
+**On terminal**
+
+2. npx convex env set AUTH_GITHUB_ID=yourgithubclientid
+   npx convex env set AUTH_GITHUB_SECRET=yourgithubsecret
+
+3. Usage:
+   import { useAuthActions } from "@convex-dev/auth/react";
+
+export function SignIn() {
+const { signIn } = useAuthActions();
+return (
+<button onClick={() => void signIn("github")}>Sign in with GitHub</button>
+);
+}
+export function SignIn() {
+const { signIn } = useAuthActions();
+return (
+<button onClick={() => void signIn("github")}>Sign in with GitHub</button>
+);
+}
+or
+const Home = () => {
+const { signOut } = useAuthActions();
+return (
+
+   <div>
+   Home <Button onClick={() => signOut()}>Logout</Button>
+   </div>
+   );
+   };

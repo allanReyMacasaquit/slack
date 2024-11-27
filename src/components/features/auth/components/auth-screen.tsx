@@ -21,6 +21,8 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 
+import { useAuthActions } from '@convex-dev/auth/react';
+
 import { AuthType } from '../types';
 
 const formSchema = z
@@ -42,6 +44,7 @@ const formSchema = z
 
 const AuthScreen = () => {
 	const [state, setState] = useState<AuthType>('SignIn');
+	const { signIn } = useAuthActions();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -91,7 +94,10 @@ const AuthScreen = () => {
 						<Button className='bg-google w-full lg:w-2/3 hover:bg-google/90'>
 							<FcGoogle size={24} /> Google
 						</Button>
-						<Button className='bg-github w-full lg:w-2/3 hover:bg-github/90'>
+						<Button
+							onClick={() => void signIn('github')}
+							className='bg-github w-full lg:w-2/3 hover:bg-github/90'
+						>
 							<SiGithub size={24} /> GitHub
 						</Button>
 					</div>
