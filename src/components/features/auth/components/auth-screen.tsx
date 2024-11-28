@@ -13,37 +13,25 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Loader } from 'lucide-react';
+import Image from 'next/image';
 import { z } from 'zod';
 
 import { FcGoogle } from 'react-icons/fc';
 import { SiGithub } from 'react-icons/si';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import { Separator } from '@/components/ui/separator';
 
 import { useAuthActions } from '@convex-dev/auth/react';
 
 import { AuthType } from '../types';
-
-const formSchema = z
-	.object({
-		email: z.string().email('Invalid email').max(50),
-		password: z
-			.string()
-			.min(8, 'Password must be at least 8 characters')
-			.max(50),
-		confirm_password: z
-			.string()
-			.min(8, 'Password must be at least 8 characters')
-			.max(50),
-	})
-	.refine((data) => data.password === data.confirm_password, {
-		message: 'Passwords must match',
-		path: ['confirm_password'],
-	});
+import { formSchema } from '@/schema';
 
 const AuthScreen = () => {
 	const [state, setState] = useState<AuthType>('SignIn');
+	const [pendingStates, setPendingStates] = useState<Record<string, boolean>>(
+		{}
+	);
 	const { signIn } = useAuthActions();
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -55,8 +43,19 @@ const AuthScreen = () => {
 		},
 	});
 
-	const onSubmit = (values: z.infer<typeof formSchema>) => {
-		// Handle form submission
+	const handleButtonClick = async (
+		buttonKey: string,
+		action: () => Promise<void>
+	) => {
+		setPendingStates((prev) => ({ ...prev, [buttonKey]: true })); // Start pending for the clicked button
+		try {
+			await action();
+		} finally {
+			setPendingStates((prev) => ({ ...prev, [buttonKey]: false })); // Reset pending for the clicked button
+		}
+	};
+
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		console.log(values);
 	};
 
@@ -91,14 +90,37 @@ const AuthScreen = () => {
 					{/* Social Login Buttons */}
 					<div className='flex flex-col items-center space-y-4'>
 						<span className='text-sm'>Continue with</span>
-						<Button className='bg-google w-full lg:w-2/3 hover:bg-google/90'>
-							<FcGoogle size={24} /> Google
+						<Button
+							onClick={() =>
+								handleButtonClick('google', async () => {
+									await signIn('google');
+								})
+							}
+							className='bg-google w-full lg:w-2/3 hover:bg-google/90 hover:cursor-pointer'
+							disabled={pendingStates['google']}
+						>
+							<FcGoogle size={24} />
+							{pendingStates['google'] ? (
+								<Loader size={14} className='animate-spin' />
+							) : (
+								'Google'
+							)}
 						</Button>
 						<Button
-							onClick={() => void signIn('github')}
-							className='bg-github w-full lg:w-2/3 hover:bg-github/90'
+							onClick={() =>
+								handleButtonClick('github', async () => {
+									await signIn('github');
+								})
+							}
+							className='bg-github w-full lg:w-2/3 hover:bg-github/90 hover:cursor-pointer'
+							disabled={pendingStates['github']}
 						>
-							<SiGithub size={24} /> GitHub
+							<SiGithub size={24} />
+							{pendingStates['github'] ? (
+								<Loader size={14} className='animate-spin' />
+							) : (
+								'GitHub'
+							)}
 						</Button>
 					</div>
 

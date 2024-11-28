@@ -1,4 +1,4 @@
-**Set up Backend**
+## Set up Backend
 (Open terminal inside project)
 
 1. npm install convex
@@ -84,12 +84,6 @@ return (
 <button onClick={() => void signIn("github")}>Sign in with GitHub</button>
 );
 }
-export function SignIn() {
-const { signIn } = useAuthActions();
-return (
-<button onClick={() => void signIn("github")}>Sign in with GitHub</button>
-);
-}
 or
 const Home = () => {
 const { signOut } = useAuthActions();
@@ -100,3 +94,39 @@ return (
    </div>
    );
    };
+
+**Setup Google OAuth**
+
+A. Create project
+   a. name
+   b. create
+
+B. Go to APIs and Services
+   1. Oauth consent screen
+      a. App name
+      b. User supprt email
+      c. Add Domain
+      d. developers email
+      save and continue.
+      scopes skip Save and Continue.
+      test users skip Save and Continue.
+      summary
+   2. Credentials
+      a. Create Credentials
+         1.OAuth client ID
+         2. Application Type : Web Application
+         3. Authorized Javascript Origins : http://localhost:3000
+         4. Authorized redirect URIs : https://next-fox-226.convex.site/api/auth/callback/google
+         create
+
+  **On terminal**
+   npx convex env set AUTH_GOOGLE_ID=clientId
+   npx convex env set AUTH_GOOGLE_SECRET=secretId
+
+import { convexAuth } from '@convex-dev/auth/server';
+import GitHub from '@auth/core/providers/github';
+import Google from '@auth/core/providers/google';
+
+export const { auth, signIn, signOut, store } = convexAuth({
+	providers: [GitHub, Google],
+});

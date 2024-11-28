@@ -1,6 +1,6 @@
 import AuthScreen from '@/components/features/auth/components/auth-screen';
 
-const AuthPage = () => {
+const AuthPage = async () => {
 	return <AuthScreen />;
 };
 export default AuthPage;
