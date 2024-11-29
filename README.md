@@ -34,3 +34,34 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# Define the content of the README
+
+readme_content = """
+
+# Backend Setup
+
+## Prerequisites
+
+Make sure you have Node.js installed. Open a terminal inside the project directory.
+
+---
+
+### Step 1: Install Dependencies
+
+Run the following commands:
+
+```bash
+npm install convex
+npx convex dev
+
+"use client";
+
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+
+const client = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL);
+
+export const ConvexClientProvider = ({ children }: { children: React.ReactNode }) => (
+  <ConvexProvider client={client}>{children}</ConvexProvider>
+);
+```

@@ -24,11 +24,19 @@ import { SiGithub } from 'react-icons/si';
 
 import { useAuthActions } from '@convex-dev/auth/react';
 
-import { AuthType } from '../types';
-import { formSchema } from '@/schema';
+import { toast } from 'react-hot-toast';
+import { api } from '../../../../../convex/_generated/api';
+
+// Validation Schema
+const formSchema = z.object({
+	email: z.string().email('Invalid email').max(50),
+	password: z.string().min(8, 'Password must be at least 8 characters').max(50),
+	confirm_password: z.string().optional(),
+});
 
 const AuthScreen = () => {
-	const [state, setState] = useState<AuthType>('SignIn');
+	const [state, setState] = useState<'SignIn' | 'SignUp'>('SignIn');
+	const [isLoading, setIsLoading] = useState(false);
 	const [pendingStates, setPendingStates] = useState<Record<string, boolean>>(
 		{}
 	);
@@ -43,20 +51,63 @@ const AuthScreen = () => {
 		},
 	});
 
+	const setPendingState = (action: string, isPending: boolean) => {
+		setPendingStates((prev) => ({
+			...prev,
+			[action]: isPending,
+		}));
+	};
 	const handleButtonClick = async (
 		buttonKey: string,
 		action: () => Promise<void>
 	) => {
-		setPendingStates((prev) => ({ ...prev, [buttonKey]: true })); // Start pending for the clicked button
+		setPendingStates((prev) => ({ ...prev, [buttonKey]: true })); // Start pending
 		try {
 			await action();
 		} finally {
-			setPendingStates((prev) => ({ ...prev, [buttonKey]: false })); // Reset pending for the clicked button
+			setPendingStates((prev) => ({ ...prev, [buttonKey]: false })); // Reset pending
 		}
 	};
+	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+		const action = state === 'SignIn' ? 'signIn' : 'signUp';
+		setPendingState(action, true);
+		setIsLoading(true);
 
-	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		console.log(values);
+		try {
+			// For Sign Up, validate password confirmation
+			if (state === 'SignUp' && data.password !== data.confirm_password) {
+				toast.error("Passwords don't match");
+				return;
+			}
+
+			// Check if email already exists during SignUp
+			if (state === 'SignUp') {
+				const emailExists = api.queries.checkEmailExists;
+				if (emailExists) {
+					toast.error(
+						'Email already registered. Please sign in or use a different email.'
+					);
+					return; // Prevent further action if the email already exists
+				}
+			}
+
+			// Sign In or Sign Up
+			await signIn('password', {
+				email: data.email,
+				password: data.password,
+				flow: state === 'SignIn' ? 'signIn' : 'signUp',
+			});
+
+			toast.success(
+				`${state === 'SignIn' ? 'Signed In' : 'Signed Up'} successfully!`
+			);
+		} catch (error) {
+			console.error('Error:', error);
+			toast.error(`Failed to ${state === 'SignIn' ? 'Sign In' : 'Sign Up'}`);
+		} finally {
+			setPendingState(action, false);
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -96,7 +147,7 @@ const AuthScreen = () => {
 									await signIn('google');
 								})
 							}
-							className='bg-google w-full lg:w-2/3 hover:bg-google/90 hover:cursor-pointer'
+							className='bg-google w-full lg:w-2/3 hover:bg-google/90'
 							disabled={pendingStates['google']}
 						>
 							<FcGoogle size={24} />
@@ -112,7 +163,7 @@ const AuthScreen = () => {
 									await signIn('github');
 								})
 							}
-							className='bg-github w-full lg:w-2/3 hover:bg-github/90 hover:cursor-pointer'
+							className='bg-github w-full lg:w-2/3 hover:bg-github/90'
 							disabled={pendingStates['github']}
 						>
 							<SiGithub size={24} />
@@ -201,15 +252,28 @@ const AuthScreen = () => {
 
 							{/* Submit Button */}
 							<div className='flex justify-center'>
-								<Button type='submit' className='w-full lg:w-2/3 mt-4'>
-									{state === 'SignIn' ? 'Sign In' : 'Sign Up'}
+								<Button
+									disabled={isLoading}
+									type='submit'
+									className='w-full lg:w-2/3 mt-4 flex justify-center items-center'
+								>
+									{isLoading ? (
+										<div className='flex items-center space-x-2'>
+											<Loader size={16} className='animate-spin' />
+											<p>Loading...</p>
+										</div>
+									) : state === 'SignIn' ? (
+										'Sign In'
+									) : (
+										'Sign Up'
+									)}
 								</Button>
 							</div>
 						</form>
 					</Form>
 
 					{/* Toggle SignIn/SignUp */}
-					<p className='mt-4 text-sm text-gray-500 text-center mb-6 lg:mb-0'>
+					<p className='mt-4 text-sm text-gray-500 text-center'>
 						{state === 'SignIn' ? (
 							<>
 								Don&apos;t have an account?{' '}
