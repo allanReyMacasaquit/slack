@@ -1,4 +1,6 @@
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import Image from 'next/image';
+
 import {
 	Form,
 	FormControl,
@@ -8,18 +10,21 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { formSchema } from '@/schema';
-import { useAuthActions } from '@convex-dev/auth/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthType } from '../types';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
+import { Separator } from '@/components/ui/separator';
 import { Loader } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import Image from 'next/image';
-import { Separator } from '@/components/ui/separator';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+
+import toast from 'react-hot-toast';
+
+import { useAuthActions } from '@convex-dev/auth/react';
+
+import { useEmailExists } from '../api/use-email-exists';
+import { AuthType } from '../types';
+import { formSchema } from '@/schema';
 
 const SignUp = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +42,7 @@ const SignUp = () => {
 			confirm_password: '',
 		},
 	});
+	const { currentEmail } = useEmailExists(form.watch('email'));
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		setIsLoading(true);
@@ -45,7 +51,13 @@ const SignUp = () => {
 			// Password confirmation validation for Sign Up
 			if (state === 'signUp' && data.password !== data.confirm_password) {
 				toast.error("Passwords don't match");
-				return; // Exit early on validation error
+			}
+
+			if (currentEmail) {
+				toast.error(
+					'Email is already registered. Please use a different email.'
+				);
+				return;
 			}
 
 			// Sign In or Sign Up action
@@ -53,7 +65,7 @@ const SignUp = () => {
 				name: data.name || 'UnNamed',
 				email: data.email,
 				password: data.password,
-				flow: state, // Use 'state' to determine flow
+				flow: 'signUp', // Use 'state' to determine flow
 			});
 
 			toast.success(`Signed Up successfully!`);

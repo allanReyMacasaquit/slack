@@ -48,7 +48,7 @@ const SignIn = () => {
 
 			toast.success(`Signed In successfully!`);
 		} catch (error) {
-			if (error) toast.error(`Failed to Sign In`);
+			if (error) toast.error(`Failed to Sign In - Wrong Email/Password`);
 		} finally {
 			setIsLoading(false);
 		}
