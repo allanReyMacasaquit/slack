@@ -1,11 +1,13 @@
 'use client';
+import { useEffect, useMemo } from 'react';
 
 import UserButton from '@/components/features/auth/components/user-button';
 import { UseGetWorkspaces } from '@/components/features/workspaces/api/use-get-workspaces';
-import { useEffect, useMemo } from 'react';
+import { useCreateWorkspaceModal } from '@/components/features/modals/use-create-workpsace-modal';
 
 const Home = () => {
 	const { data, isLoading } = UseGetWorkspaces();
+	const [open, setOpen] = useCreateWorkspaceModal();
 
 	const workspaceId = useMemo(() => data?.[0]?._id, [data]);
 
@@ -13,10 +15,11 @@ const Home = () => {
 		if (isLoading) return;
 		if (workspaceId) {
 			console.log('Redirect to workspaces');
-		} else {
+		} else if (!open) {
+			setOpen(true);
 			console.log('Open creation model');
 		}
-	}, [isLoading, workspaceId]);
+	}, [isLoading, workspaceId, open, setOpen]);
 	return (
 		<div className='p-4'>
 			<UserButton />
