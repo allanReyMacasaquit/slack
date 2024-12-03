@@ -9,22 +9,47 @@ import {
 import { useCreateWorkspaceModal } from './use-create-workpsace-modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useCreateWorkspace } from '../workspaces/api/use-create-workspace';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const CreateWorkspaceModal = () => {
+	const { create, isPending } = useCreateWorkspace();
 	const [open, setOpen] = useCreateWorkspaceModal();
-	const [workspaceName, setWorkspaceName] = useState(''); // State to store the workspace name
-	const [isLoading] = useState(false);
+	const [workspaceName, setWorkspaceName] = useState('');
+
 	const onOpenChange = () => {
 		setOpen(false);
+		setWorkspaceName('');
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const router = useRouter();
+
+	const handleCreateForm = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		// Handle workspace creation logic here, like sending the workspaceName to an API
-		console.log('Workspace created:', workspaceName);
-		// Optionally, close the modal after submission
-		setOpen(false);
+		try {
+			create(
+				{ name: workspaceName },
+				{
+					onSuccess: (data) => {
+						console.log('Workspace Created:', data);
+						router.push(`/workspace/${data}`);
+						onOpenChange();
+					},
+					onError: () => {
+						console.error('Error creating workspace');
+					},
+					onSettled: () => {
+						console.log('Create workspace operation settled');
+					},
+				}
+			);
+		} catch (error) {
+			if (error) {
+				toast.error('API: Disconnected!');
+			}
+		}
 	};
 
 	return (
@@ -37,11 +62,11 @@ const CreateWorkspaceModal = () => {
 				<DialogDescription>Enter Workspace Name</DialogDescription>
 
 				{/* Form to create a new workspace */}
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={handleCreateForm}>
 					<div className='space-y-4'>
 						{/* Input field for workspace name */}
 						<Input
-							disabled={isLoading}
+							disabled={isPending}
 							type='text'
 							placeholder="Workspace Name e.g 'Work', 'Personal', 'Home'"
 							value={workspaceName}

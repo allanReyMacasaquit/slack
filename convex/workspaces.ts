@@ -17,14 +17,19 @@ export const create = mutation({
 		if (!userId) {
 			throw new Error('Unathorized');
 		}
-
+		//TODO: create joinCode method later
 		const joinCode = '123456';
+
 		const workspaceId = await ctx.db.insert('workspaces', {
 			userId,
 			name: args.name,
 			joinCode,
 		});
+		const workspace = await ctx.db.get(workspaceId);
 
-		return workspaceId;
+		return {
+			workspaceId,
+			workspace,
+		};
 	},
 });
