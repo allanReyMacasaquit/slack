@@ -30,9 +30,9 @@ const UserButton = () => {
 					</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent align='start' side='bottom'>
+			<DropdownMenuContent align='start' side='right'>
 				<DropdownMenuItem onClick={() => signOut()} disabled={isLoading}>
-					<span className='flex items-center '>
+					<span className='flex items-center hover:cursor-pointer'>
 						Logout
 						<LogOutIcon className='ml-2' />
 					</span>

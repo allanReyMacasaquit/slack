@@ -7,7 +7,7 @@ export default function SearchBar() {
 	const workspaceId = useWorkspaceId();
 	const { data } = UseGetWorkspace({ id: workspaceId });
 	return (
-		<nav className='bg-[#237486] flex items-center justify-between h-14 p-4'>
+		<nav className='bg-[#1e6474] flex items-center justify-between h-14 p-4'>
 			{/* Left Section */}
 			<div className='flex-1' />
 
