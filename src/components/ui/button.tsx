@@ -10,7 +10,7 @@ const buttonVariants = cva(
 		variants: {
 			variant: {
 				default:
-					'bg-blue-900/90 lg:w-auto lg:mx-auto text-primary-foreground hover:bg-blue-900/85',
+					'bg-[#1e6474] lg:w-auto lg:mx-auto text-primary-foreground opacity-90 hover:opacity-100',
 				destructive:
 					'bg-destructive text-destructive-foreground lg:w-auto lg:mx-auto hover:bg-destructive/90',
 				outline:

@@ -68,7 +68,7 @@ const CreateWorkspaceModal = () => {
 						<Input
 							disabled={isPending}
 							type='text'
-							placeholder="Workspace Name e.g 'Work', 'Personal', 'Home'"
+							placeholder="e.g 'Programs', 'Worship', 'Prayer', 'Preaching', 'etc..'"
 							value={workspaceName}
 							minLength={3}
 							autoFocus
