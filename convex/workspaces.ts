@@ -5,7 +5,25 @@ import { getAuthUserId } from '@convex-dev/auth/server';
 export const get = query({
 	args: {},
 	handler: async (ctx) => {
-		return await ctx.db.query('workspaces').collect();
+		const userId = await getAuthUserId(ctx);
+		if (!userId) return [];
+
+		// Fetch all members for the user
+		const members = await ctx.db
+			.query('members')
+			.withIndex('by_user_id', (q) => q.eq('userId', userId))
+			.collect();
+
+		// Extract workspaceIds from members
+		const workspaceIds = members.map((m) => m.workspaceId);
+
+		// Fetch all workspaces in a single batch
+		const workspaces = await Promise.all(
+			workspaceIds.map((workspaceId) => ctx.db.get(workspaceId))
+		);
+
+		// Filter out null or undefined workspaces (in case some IDs are invalid)
+		return workspaces.filter((workspace) => workspace !== null);
 	},
 });
 
