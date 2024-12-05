@@ -11,7 +11,6 @@ export default function SearchBar() {
 
 	const [showMobile, setShowMobile] = useState(false);
 	const mobileRef = useRef<HTMLDivElement>(null);
-	const infoButtonRef = useRef<HTMLButtonElement>(null);
 
 	const toggleMobile = () => {
 		setShowMobile((prev) => !prev);
@@ -23,12 +22,7 @@ export default function SearchBar() {
 			const target = event.target as Node;
 
 			// Close if the click is outside both Mobile and Info button
-			if (
-				mobileRef.current &&
-				!mobileRef.current.contains(target) &&
-				infoButtonRef.current &&
-				!infoButtonRef.current.contains(target)
-			) {
+			if (mobileRef.current && !mobileRef.current.contains(target)) {
 				setShowMobile(false);
 			}
 		};

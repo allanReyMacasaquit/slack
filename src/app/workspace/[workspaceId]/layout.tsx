@@ -12,7 +12,7 @@ const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
 	return (
 		<div className='h-full'>
 			<SearchBar />
-			<main className='flex  w-full'>
+			<main className='flex w-full'>
 				<Sidebar />
 				{children}
 			</main>
