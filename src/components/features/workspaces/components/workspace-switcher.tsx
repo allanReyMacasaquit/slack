@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
@@ -47,7 +46,11 @@ export default function WorkspaceSwitcher() {
 						</span>
 					</Button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent side='bottom' align='start' className='w-auto'>
+				<DropdownMenuContent
+					side='right'
+					align='start'
+					className='w-auto ml-3 lg:ml-8 border shadow-lg -mt-4 rounded-none'
+				>
 					<DropdownMenuLabel>Switch Workspace</DropdownMenuLabel>
 					<Separator />
 					<DropdownMenuItem
@@ -57,7 +60,9 @@ export default function WorkspaceSwitcher() {
 						<span className='text-sm text-muted-foreground'>
 							Active Workspace
 						</span>
-						<h1 className='text-lg'>{workspace?.name}</h1>
+						<h1 className='text-lg trucate w-64 lg:w-full px-4'>
+							{workspace?.name}
+						</h1>
 						<Separator />
 					</DropdownMenuItem>
 					{filteredWorkspaces?.map((workspace) => (
@@ -69,7 +74,7 @@ export default function WorkspaceSwitcher() {
 							<span className='border rounded-full size-8 flex items-center justify-center bg-[#1e6474] text-white '>
 								{workspace.name.charAt(0).toUpperCase()}
 							</span>
-							{workspace.name}
+							<span className='truncate w-64 lg:w-full'>{workspace.name}</span>
 						</DropdownMenuItem>
 					))}
 					<Separator />

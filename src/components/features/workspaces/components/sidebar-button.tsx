@@ -20,7 +20,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({
 		<div className='my-2'>
 			<Button
 				onClick={onClick}
-				className={`flex flex-col items-center justify-center gap-1 p-6 transition-colors 
+				className={`flex flex-col items-center justify-center gap-1 p-1 lg:p-6 transition-colors 
                 ${isActive ? 'bg-[#1e6474] text-white ' : ''}`}
 			>
 				<Icon />

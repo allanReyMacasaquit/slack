@@ -54,7 +54,7 @@ const CreateWorkspaceModal = () => {
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent>
+			<DialogContent className='bg-blue-50'>
 				<DialogHeader>
 					<DialogTitle>Create a New Workspace</DialogTitle>
 				</DialogHeader>
