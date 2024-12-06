@@ -88,6 +88,6 @@ export const getById = query({
 
 		if (!member) return null;
 
-		return await ctx.db.get(args.id);
+		return member;
 	},
 });

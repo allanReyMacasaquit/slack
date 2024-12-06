@@ -22,14 +22,16 @@ const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
 				<div className='w-full'>
 					<ResizablePanelGroup direction='horizontal' autoSaveId='arm'>
 						<ResizablePanel
-							defaultSize={11}
+							defaultSize={25}
 							minSize={11}
 							className='bg-[#1b5967] p-5 lg:p-4'
 						>
-							<div className='flex justify-center text-white'>Content</div>
+							<div className='flex justify-center text-white'>
+								<span className='mx-auto'>Content</span>
+							</div>
 						</ResizablePanel>
 						<ResizableHandle />
-						<ResizablePanel minSize={30} className='px-4 lg:px-10 pt-5 lg:pt-4'>
+						<ResizablePanel minSize={50} className='px-4 lg:px-4 pt-5'>
 							{children}
 						</ResizablePanel>
 					</ResizablePanelGroup>

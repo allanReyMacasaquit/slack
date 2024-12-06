@@ -30,7 +30,7 @@ export function useCreateWorkspace() {
 	const isSettled = useMemo(() => status === 'settled', [status]);
 	const isSuccess = useMemo(() => status === 'success', [status]);
 
-	const createWorkspace = useMutation(api.workspaces.create);
+	const createWorkspace = useMutation(api.query.workspaces.create);
 
 	const create = useCallback(
 		async (

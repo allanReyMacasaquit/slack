@@ -22,7 +22,7 @@ export default function SearchBar() {
 
 			{/* Center Section */}
 			<div className='flex items-center w-full overflow-auto'>
-				<Button className='lg:bg-accent/10 lg:hover:bg-accent/15 w-full lg:min-w-[950px] justify-start'>
+				<Button className='lg:bg-accent/10 lg:hover:bg-accent/15 w-full lg:min-w-[570px] xl:min-w-[750px] justify-start'>
 					<Search />
 					<span className='text-white text-lg'>{data?.name}</span>
 				</Button>
