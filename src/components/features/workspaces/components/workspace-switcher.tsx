@@ -6,7 +6,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { Loader, Plus } from 'lucide-react';
+import { ChevronDown, Loader, Plus } from 'lucide-react';
 import useWorkspaceId from '@/hooks/workspace/use-workspace-id';
 import { UseGetWorkspace } from '../api/use-get-workspace';
 import { UseGetWorkspaces } from '../api/use-get-workspaces';
@@ -32,6 +32,12 @@ export default function WorkspaceSwitcher() {
 	return (
 		<div className='flex items-center border opacity-70 hover:opacity-100 size-10 rounded-full mx-auto mb-10'>
 			<DropdownMenu>
+				<DropdownMenuLabel className=' hidden lg:block absolute lg:top-3 lg:bottom-10 lg:left-9'>
+					<p className='text-lg'>Select Workspace</p>
+					<span>
+						<ChevronDown className='animate-bounce' />
+					</span>
+				</DropdownMenuLabel>
 				<DropdownMenuTrigger
 					asChild
 					className='outline-none relative overflow-hidden'
@@ -40,8 +46,10 @@ export default function WorkspaceSwitcher() {
 						<span className='text-lg'>
 							{workspaceLoading ? (
 								<Loader className='size-5 animate-spin' />
+							) : workspace?.name ? (
+								workspace.name.charAt(0).toUpperCase()
 							) : (
-								workspace?.name.charAt(0).toUpperCase()
+								'?'
 							)}
 						</span>
 					</Button>
