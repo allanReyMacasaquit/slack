@@ -3,40 +3,20 @@ import useWorkspaceId from '@/hooks/workspace/use-workspace-id';
 import { Info, Search } from 'lucide-react';
 import { UseGetWorkspace } from '../api/use-get-workspace';
 import Mobile from './mobile';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 export default function SearchBar() {
 	const workspaceId = useWorkspaceId();
 	const { data } = UseGetWorkspace({ id: workspaceId });
 
 	const [showMobile, setShowMobile] = useState(false);
-	const mobileRef = useRef<HTMLDivElement>(null);
 
 	const toggleMobile = () => {
 		setShowMobile((prev) => !prev);
 	};
 
-	// Close the Mobile component when clicking outside
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			const target = event.target as Node;
-
-			// Close if the click is outside both Mobile and Info button
-			if (mobileRef.current && !mobileRef.current.contains(target)) {
-				setShowMobile(false);
-			}
-		};
-
-		if (showMobile) {
-			document.addEventListener('mousedown', handleClickOutside);
-		}
-
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-		};
-	}, [showMobile]);
 	return (
-		<nav className='bg-[#1e6474] flex items-center justify-between h-14 p-4'>
+		<nav className='z-50 bg-[#1e6474] flex items-center justify-between h-14 p-4'>
 			{/* Left Section */}
 			<div className='flex-1' />
 
@@ -44,9 +24,7 @@ export default function SearchBar() {
 			<div className='flex items-center w-full overflow-auto'>
 				<Button className='lg:bg-accent/10 lg:hover:bg-accent/15 w-full lg:min-w-[950px] justify-start'>
 					<Search />
-					<span className='text-white text-lg'>
-						Search Workspace Name : {data?.name}
-					</span>
+					<span className='text-white text-lg'>{data?.name}</span>
 				</Button>
 			</div>
 
@@ -58,11 +36,7 @@ export default function SearchBar() {
 				>
 					<Info />
 				</Button>
-				{showMobile && (
-					<div ref={mobileRef}>
-						<Mobile />
-					</div>
-				)}
+				{showMobile && <Mobile />}
 			</div>
 		</nav>
 	);

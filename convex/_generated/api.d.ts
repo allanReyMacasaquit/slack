@@ -14,10 +14,11 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as auth from "../auth.js";
-import type * as checkEmailExists from "../checkEmailExists.js";
 import type * as http from "../http.js";
-import type * as user from "../user.js";
-import type * as workspaces from "../workspaces.js";
+import type * as query_checkEmailExists from "../query/checkEmailExists.js";
+import type * as query_members from "../query/members.js";
+import type * as query_user from "../query/user.js";
+import type * as query_workspaces from "../query/workspaces.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -29,10 +30,11 @@ import type * as workspaces from "../workspaces.js";
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
-  checkEmailExists: typeof checkEmailExists;
   http: typeof http;
-  user: typeof user;
-  workspaces: typeof workspaces;
+  "query/checkEmailExists": typeof query_checkEmailExists;
+  "query/members": typeof query_members;
+  "query/user": typeof query_user;
+  "query/workspaces": typeof query_workspaces;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

@@ -5,10 +5,6 @@ import useWorkspaceId from '@/hooks/workspace/use-workspace-id';
 const WorkspaceIdPage = () => {
 	const workspaceId = useWorkspaceId();
 	const { data } = UseGetWorkspace({ id: workspaceId });
-	return (
-		<div className='w-full overflow-x-auto'>
-			WorkspaceIdPage: {JSON.stringify(data)}
-		</div>
-	);
+	return <div className=''>{data?.name}</div>;
 };
 export default WorkspaceIdPage;

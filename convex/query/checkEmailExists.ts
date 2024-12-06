@@ -1,6 +1,6 @@
 // convex/_generated/server.ts or wherever your backend code is located
 import { v } from 'convex/values';
-import { query } from './_generated/server';
+import { query } from '../_generated/server';
 
 export const checkEmail = query({
 	args: { email: v.string() },

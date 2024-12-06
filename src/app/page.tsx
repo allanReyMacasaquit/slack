@@ -23,10 +23,6 @@ const Home = () => {
 			console.log('Open creation model');
 		}
 	}, [isLoading, workspaceId, open, setOpen, router]);
-	return (
-		<div className='p-4'>
-			<UserButton />
-		</div>
-	);
+	return <div className='p-4'></div>;
 };
 export default Home;

@@ -8,6 +8,7 @@ import {
 import { useAuthActions } from '@convex-dev/auth/react';
 import { useCurrentUser } from '../api/use-current-user';
 import { Loader, LogOutIcon } from 'lucide-react';
+import { redirect } from 'next/navigation';
 
 const UserButton = () => {
 	const { signOut } = useAuthActions();
@@ -20,6 +21,11 @@ const UserButton = () => {
 	const { name, image } = currentUser;
 
 	const avatarFallback = name?.charAt(0).toUpperCase();
+
+	const handleSignout = async () => {
+		await signOut();
+		redirect('/auth');
+	};
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild className='outline-none relative'>
@@ -31,7 +37,7 @@ const UserButton = () => {
 				</Avatar>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='start' side='right'>
-				<DropdownMenuItem onClick={() => signOut()} disabled={isLoading}>
+				<DropdownMenuItem onClick={() => handleSignout()} disabled={isLoading}>
 					<span className='flex items-center hover:cursor-pointer'>
 						Logout
 						<LogOutIcon className='ml-2' />
