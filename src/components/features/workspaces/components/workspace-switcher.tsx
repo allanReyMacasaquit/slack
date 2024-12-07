@@ -30,7 +30,7 @@ export default function WorkspaceSwitcher() {
 		(workspace) => workspace._id !== workspaceId
 	);
 	return (
-		<div className='flex items-center border opacity-70 hover:opacity-100 size-10 rounded-full mx-auto mb-10'>
+		<div className='flex items-center border opacity-70 size-10 rounded-full mx-auto mb-10'>
 			<DropdownMenu>
 				<DropdownMenuLabel className=' hidden lg:block absolute lg:top-3 lg:bottom-10 lg:left-9'>
 					<p className='text-lg'>Select Workspace</p>
@@ -42,7 +42,7 @@ export default function WorkspaceSwitcher() {
 					asChild
 					className='outline-none relative overflow-hidden'
 				>
-					<Button className='size-10 rounded-full bg-accent/10 hover:bg-accent/15'>
+					<Button className='size-10 opacity-80 hover:opacity-100 rounded-full bg-accent/10 hover:bg-accent/15'>
 						<span className='text-lg'>
 							{workspaceLoading ? (
 								<Loader className='size-5 animate-spin' />

@@ -8,9 +8,10 @@ import {
 import { useAuthActions } from '@convex-dev/auth/react';
 import { useCurrentUser } from '../api/use-current-user';
 import { Loader, LogOutIcon } from 'lucide-react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const UserButton = () => {
+	const router = useRouter();
 	const { signOut } = useAuthActions();
 	const { currentUser, isLoading } = useCurrentUser();
 	if (isLoading) {
@@ -24,7 +25,7 @@ const UserButton = () => {
 
 	const handleSignout = async () => {
 		await signOut();
-		redirect('/auth');
+		router.refresh();
 	};
 	return (
 		<DropdownMenu>

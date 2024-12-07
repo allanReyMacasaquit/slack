@@ -1,5 +1,6 @@
 'use client';
 
+import WorkspaceLeftPanel from '@/components/features/members/components/workspace-left-panel';
 import SearchBar from '@/components/features/workspaces/components/searchbar';
 import Sidebar from '@/components/features/workspaces/components/sidebar';
 import {
@@ -22,12 +23,12 @@ const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
 				<div className='w-full'>
 					<ResizablePanelGroup direction='horizontal' autoSaveId='arm'>
 						<ResizablePanel
-							defaultSize={25}
-							minSize={11}
+							defaultSize={28}
+							minSize={8}
 							className='bg-[#1b5967] p-5 lg:p-4'
 						>
-							<div className='flex justify-center text-white'>
-								<span className='mx-auto'>Content</span>
+							<div className='text-white'>
+								<WorkspaceLeftPanel />
 							</div>
 						</ResizablePanel>
 						<ResizableHandle />
